@@ -72,6 +72,7 @@
         playing: false,
         track: 0,
         prog: 0,
+        radioCh: 0,
         eq: new Array(20).fill(8),
         termHist: [
           { text: "HHX-OS TERMLINK [BUILD 2.2.2287]", color: "#5dffa0" },
@@ -761,33 +762,33 @@
           </div>
         </div>`;
 
-      if (win.isMusic) return html`
-        <div style="flex:1;overflow:hidden;display:flex;flex-direction:column;padding:12px;gap:10px;background:#04100a;">
+      if (win.isMusic) {
+        const r = D.radio;
+        const chIdx = this.state.radioCh || 0;
+        const ch = r.channels[chIdx] || r.channels[0];
+        const src = "https://open.spotify.com/embed/playlist/" + ch.playlist + "?utm_source=generator";
+        return html`
+        <div style="flex:1;overflow:auto;display:flex;flex-direction:column;padding:12px;gap:10px;background:#04100a;">
           <div style="display:flex;align-items:center;gap:10px;">
-            <img src="assets/vault/vicon-radio.png" alt="" style="width:44px;height:44px;"/>
+            <img src="assets/vault/vicon-radio.png" alt="" style="width:40px;height:40px;flex:0 0 auto;"/>
             <div style="min-width:0;flex:1;">
-              <div style=${"font-family:" + VT + ";font-size:23px;color:#5dffa0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.5px;"}>${win.trackTitle}</div>
-              <div style=${"font-size:18px;color:#3fcf78;font-family:" + VT + ";"}>${win.trackArtist}</div>
+              <div style=${"font-family:" + VT + ";font-size:22px;color:#5dffa0;letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"}>${r.station}</div>
+              <div style=${"font-size:16px;color:#3fcf78;font-family:" + VT + ";white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"}>${"CH-0" + (chIdx + 1) + " // " + ch.freq + " · " + ch.label}</div>
             </div>
+            <span style=${"display:flex;align-items:center;gap:5px;font-family:" + VT + ";font-size:14px;color:#1aff80;flex:0 0 auto;"}><span style="width:7px;height:7px;border-radius:50%;background:#1aff80;animation:blink 1.6s steps(1) infinite;"></span>ON AIR</span>
           </div>
-          <div style="display:flex;align-items:flex-end;gap:2px;height:56px;border:1px solid #1c5a34;padding:6px;background:#020a05;">
-            ${win.eqBars.map((b, i) => html`<div key=${i} style=${"flex:1;height:" + b.h + "%;background:#1aff80;min-height:2px;"}></div>`)}
+          <div style="display:flex;align-items:flex-end;gap:2px;height:30px;border:1px solid #1c5a34;padding:5px;background:#020a05;">
+            ${Array.from({ length: 26 }, (_, i) => html`<span key=${i} style=${"flex:1;background:#1aff80;height:100%;transform-origin:bottom;animation:mb-eq .9s ease-in-out " + (i * 0.06).toFixed(2) + "s infinite;"}></span>`)}
           </div>
-          <div style=${"display:flex;align-items:center;gap:8px;font-size:18px;font-family:" + VT + ";color:#5dffa0;"}>
-            <span>${win.curTime}</span>
-            <div style="flex:1;height:9px;border:1px solid #1c5a34;background:#020a05;"><div style=${"height:100%;width:" + win.progressPct + "%;background:#1aff80;"}></div></div>
-            <span>${win.totTime}</span>
+          <div style="border:1px solid #2bd968;background:#020a05;padding:4px;">
+            <iframe title="Spotify" src=${src} width="100%" height="152" style="border:0;border-radius:6px;display:block;" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
           </div>
-          <div style="display:flex;justify-content:center;gap:8px;">
-            <button class="h-fill" onClick=${win.onPrev} style="width:46px;height:28px;cursor:pointer;border:1px solid #2bd968;background:#0c2415;color:#7dffae;font-size:14px;">${"|<"}</button>
-            <button class="h-fill" onClick=${win.onPlay} style="width:58px;height:28px;cursor:pointer;border:1px solid #2bd968;background:#0c2415;color:#7dffae;font-size:14px;font-weight:700;">${win.playLabel}</button>
-            <button class="h-fill" onClick=${win.onNext} style="width:46px;height:28px;cursor:pointer;border:1px solid #2bd968;background:#0c2415;color:#7dffae;font-size:14px;">${">|"}</button>
+          <div style="display:flex;gap:6px;">
+            ${r.channels.map((c, i) => html`<button key=${i} onClick=${() => this.setState({ radioCh: i })} style=${"flex:1;min-width:0;font-family:" + VT + ";font-size:14px;letter-spacing:.5px;padding:6px 6px;cursor:pointer;border:1px solid #2bd968;transition:all .13s ease;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" + (i === chIdx ? "background:#1aff80;color:#04100a;" : "background:#0c2415;color:#7dffae;")}>${c.label}</button>`)}
           </div>
-          <div style="flex:1;min-height:0;overflow:auto;border:1px solid #1c5a34;background:#020a05;padding:4px;">
-            ${win.playlist.map((t, i) => html`
-              <div key=${i} onClick=${t.onPick} style=${t.rowStyle}><span style="opacity:.6;width:18px;flex:0 0 auto;">${t.num}</span><span style="flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.5px;">${t.title}</span><span style="opacity:.6;">${t.len}</span></div>`)}
-          </div>
+          <div style=${"font-family:" + VT + ";font-size:13px;color:#2c7a48;letter-spacing:.5px;text-align:center;line-height:1.4;"}>CITY POP · STREAMING VIA SPOTIFY<br/>30s PREVIEW · FULL TRACKS WHEN SIGNED IN</div>
         </div>`;
+      }
 
       if (win.isTerminal) return html`
         <div onClick=${this.focusTerm} style=${"flex:1;min-height:0;display:flex;flex-direction:column;background:#020a05;padding:9px 11px;font-family:" + VT + ";font-size:21px;line-height:1.25;color:#41ff83;overflow:auto;cursor:text;"}>

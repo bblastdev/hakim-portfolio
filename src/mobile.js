@@ -67,7 +67,7 @@
         view: "home", powered: true, bootPhase: "bios", bootShown: 0,
         // System Settings
         uiPhosphor: "Green", uiScan: true, ui24: true, uiBright: 100, uiVol: 72,
-        workSel: null, track: 0, playing: false, prog: 0, clock: "--:--", termInput: "",
+        workSel: null, track: 0, playing: false, prog: 0, radioCh: 0, clock: "--:--", termInput: "",
         termHist: [
           { t: "HHX-OS MOBILE TERMLINK  v2.2.2287", c: "#ffb000" },
           { t: "(C) HAKIM-HAIMAN INDUSTRIES", c: "#2c7a48" },
@@ -489,39 +489,37 @@
     }
 
     renderRadio(ctx, VT) {
-      const { cur, eqBars, playlist, s } = ctx;
-      const playLabel = s.playing ? "❚❚ PAUSE" : "▶ PLAY";
-      const progressPct = Math.min(100, (s.prog / cur.len) * 100);
+      const r = D.radio;
+      const chIdx = this.state.radioCh || 0;
+      const ch = r.channels[chIdx] || r.channels[0];
+      const src = "https://open.spotify.com/embed/playlist/" + ch.playlist + "?utm_source=generator";
       return html`
       <div style="padding:14px;display:flex;flex-direction:column;gap:13px;">
         <div style="border:1px solid #1c5a34;background:#04100a;padding:14px;display:flex;flex-direction:column;gap:12px;">
-          <div style="text-align:center;">
-            <div style=${"font-family:" + VT + ";font-size:26px;color:#5dffa0;letter-spacing:.5px;"}>${cur.title}</div>
-            <div style="font-size:13px;color:#7dcc8f;margin-top:3px;letter-spacing:1px;">${cur.artist}</div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <img src=${V + "vicon-radio.png"} alt="" style="width:38px;height:38px;flex:0 0 auto;"/>
+            <div style="min-width:0;flex:1;">
+              <div style=${"font-family:" + VT + ";font-size:24px;color:#5dffa0;letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"}>${r.station}</div>
+              <div style="font-size:12.5px;color:#7dcc8f;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${"CH-0" + (chIdx + 1) + " // " + ch.freq + " · " + ch.label}</div>
+            </div>
+            <span style=${"display:flex;align-items:center;gap:5px;font-family:" + VT + ";font-size:13px;color:#1aff80;flex:0 0 auto;"}><span style="width:7px;height:7px;border-radius:50%;background:#1aff80;animation:mb-blink 1.6s steps(1) infinite;"></span>ON AIR</span>
           </div>
-          <div style="display:flex;align-items:flex-end;gap:3px;height:54px;border:1px solid #1c5a34;padding:7px;background:#020a05;">
-            ${eqBars.map((b, i) => html`<span key=${i} style=${b.style}></span>`)}
+          <div style="display:flex;align-items:flex-end;gap:3px;height:40px;border:1px solid #1c5a34;padding:6px;background:#020a05;">
+            ${Array.from({ length: 22 }, (_, i) => html`<span key=${i} style=${"flex:1;min-width:0;background:#1aff80;height:100%;transform-origin:bottom;animation:mb-eq .9s ease-in-out " + (i * 0.07).toFixed(2) + "s infinite;"}></span>`)}
           </div>
-          <div style=${"display:flex;align-items:center;gap:9px;font-family:" + VT + ";font-size:16px;color:#5dffa0;"}>
-            <span>${this.fmtSec(s.prog)}</span>
-            <span style="flex:1;height:8px;border:1px solid #1c5a34;background:#020a05;display:block;"><span style=${"display:block;height:100%;width:" + progressPct + "%;background:#1aff80;"}></span></span>
-            <span>${this.fmtSec(cur.len)}</span>
-          </div>
-          <div style="display:flex;justify-content:center;gap:10px;">
-            <button class="h-fill" onClick=${() => this.setState((st) => ({ track: (st.track - 1 + this.tracks.length) % this.tracks.length, prog: 0, playing: true }))} style="width:56px;height:34px;cursor:pointer;border:1px solid #2bd968;background:#0c2415;color:#7dffae;font-size:14px;">‹‹</button>
-            <button class="h-fill" onClick=${() => this.setState((st) => ({ playing: !st.playing }))} style="width:74px;height:34px;cursor:pointer;border:1px solid #2bd968;background:#0c2415;color:#7dffae;font-size:15px;font-weight:bold;">${playLabel}</button>
-            <button class="h-fill" onClick=${() => this.setState((st) => ({ track: (st.track + 1) % this.tracks.length, prog: 0, playing: true }))} style="width:56px;height:34px;cursor:pointer;border:1px solid #2bd968;background:#0c2415;color:#7dffae;font-size:14px;">››</button>
+          <div style="border:1px solid #2bd968;background:#020a05;padding:4px;">
+            <iframe title="Spotify" src=${src} width="100%" height="152" style="border:0;border-radius:6px;display:block;" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
           </div>
         </div>
         <div style="border:1px solid #1c5a34;background:#04100a;">
           <div style=${"padding:6px 11px;border-bottom:1px solid #1c5a34;font-family:" + VT + ";font-size:16px;color:#3fcf78;letter-spacing:1.5px;"}>▸ CHANNELS</div>
-          ${playlist.map((p, i) => html`
-            <button key=${i} onClick=${p.onPick} style=${p.rowStyle}>
-              <span style="color:#2c7a48;width:24px;flex:0 0 auto;">${p.num}</span>
-              <span style="flex:1;min-width:0;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.title}</span>
-              <span style="color:#7dcc8f;flex:0 0 auto;">${p.len}</span>
+          ${r.channels.map((c, i) => html`
+            <button key=${i} onClick=${() => this.setState({ radioCh: i })} style=${"display:flex;align-items:center;gap:9px;width:100%;padding:10px 11px;cursor:pointer;border:none;border-bottom:1px solid #102b1a;font-family:" + VT + ";font-size:18px;transition:all .13s ease;" + (i === chIdx ? "background:#1aff80;color:#04100a;" : "background:transparent;color:#7dffae;")}>
+              <span style=${"width:58px;flex:0 0 auto;text-align:left;color:" + (i === chIdx ? "#04100a" : "#2c7a48") + ";"}>${c.freq}</span>
+              <span style="flex:1;min-width:0;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.5px;">${c.label}</span>
             </button>`)}
         </div>
+        <div style=${"font-family:" + VT + ";font-size:13px;color:#2c7a48;letter-spacing:.5px;text-align:center;line-height:1.4;"}>CITY POP · STREAMING VIA SPOTIFY<br/>30s PREVIEW · FULL TRACKS WHEN SIGNED IN</div>
       </div>`;
     }
 
