@@ -252,8 +252,14 @@
       return html`
       <div class="hhx-mobile" style=${"position:relative;width:404px;height:830px;border-radius:48px;background-color:#393c38;padding:13px;box-shadow:0 34px 80px rgba(0,0,0,.65),inset 0 0 0 2px #0b0d07,inset 0 2px 1px rgba(255,255,255,.05);display:flex;flex-direction:column;font-family:" + STM + ";color:#8effb5;"}>
 
-        ${/* ===== SCREEN ===== */ null}
-        <div style=${"position:relative;width:100%;flex:1;min-height:0;border-radius:34px;overflow:hidden;background:#06140c;border:1px solid #0b1f12;display:flex;flex-direction:column;color:#8effb5;filter:" + sys.screenFilter + ";"}>
+        ${/* ===== SCREEN =====
+             The rounded clip (border-radius + overflow:hidden) stays on THIS
+             element with no filter — iOS Safari drops corner-clipping when a
+             filter or blend-mode lives on the clipping element itself. The
+             colour filter goes on the inner wrapper; isolation:isolate keeps
+             the flicker's mix-blend-mode from escaping the rounded corners. */ null}
+        <div style="position:relative;width:100%;flex:1;min-height:0;border-radius:34px;overflow:hidden;background:#06140c;border:1px solid #0b1f12;isolation:isolate;">
+          <div style=${"position:absolute;inset:0;display:flex;flex-direction:column;color:#8effb5;filter:" + sys.screenFilter + ";"}>
 
           ${/* status bar */ null}
           <div style=${"flex:0 0 auto;height:36px;display:flex;align-items:center;gap:8px;padding:0 16px;font-family:" + VT + ";font-size:16px;color:#7dffae;letter-spacing:.5px;border-bottom:1px solid #0e3320;background:rgba(6,26,14,.92);position:relative;z-index:60;"}>
@@ -345,6 +351,7 @@
           ${/* CRT overlay — scanlines toggle via System Settings */ null}
           ${sys.showScan ? html`<div style="position:absolute;inset:0;pointer-events:none;z-index:70;background-image:repeating-linear-gradient(rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,12,5,.22) 3px,rgba(0,12,5,.22) 3px);box-shadow:inset 0 0 90px 26px rgba(0,8,3,.72);border-radius:34px;"></div>` : null}
           <div style="position:absolute;inset:0;pointer-events:none;z-index:71;background:#1aff80;mix-blend-mode:overlay;opacity:.05;animation:mb-flick .12s steps(2) infinite;border-radius:34px;"></div>
+          </div>
         </div>
 
         ${/* ===== DEVICE CONTROLS ===== */ null}
