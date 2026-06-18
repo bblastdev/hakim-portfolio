@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hakim Haiman — UI/UX Designer · HHX-OS</title>
+  <meta name="description" content="The portfolio of Hakim Haiman, UI/UX Designer — served as HHX-OS, a retro phosphor-green operating system running inside a CRT television.">
+  <meta name="theme-color" content="#04100a">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Hakim Haiman — UI/UX Designer">
+  <meta property="og:description" content="A retro CRT terminal portfolio. Boot HHX-OS and explore the case files.">
+  <meta property="og:type" content="website">
+
+  <link rel="icon" type="image/png" href="assets/vault/vavatar.png">
+
+  <!-- Avoid a white flash before the stylesheet lands -->
+  <style>html{background:#0a0a0b;}</style>
+
+  <!-- Display fonts: VT323 (headings) + Share Tech Mono (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="tv-page">
+    <div id="root"></div>
+  </main>
+
+  <noscript>
+    <p style="color:#7dffae;font-family:monospace;text-align:center;padding:2rem;">
+      HHX-OS requires JavaScript to boot. Please enable it to view this portfolio.
+    </p>
+  </noscript>
+
+  <!-- Runtime: Preact + htm (UMD globals, no build step) -->
+  <script src="https://unpkg.com/preact@10.24.3/dist/preact.umd.js"></script>
+  <script src="https://unpkg.com/htm@3.1.1/dist/htm.umd.js"></script>
+
+  <!-- Application -->
+  <script src="src/data.js"></script>
+  <script src="src/mobile.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>

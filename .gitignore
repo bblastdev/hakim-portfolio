@@ -1,0 +1,9 @@
+# OS / editor cruft
+.DS_Store
+*.log
+
+# Local tooling (preview dev-server config) — not needed to deploy
+.claude/
+
+# Node (none used, but just in case)
+node_modules/
