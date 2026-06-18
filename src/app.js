@@ -786,7 +786,6 @@
           <div style="display:flex;gap:6px;">
             ${r.channels.map((c, i) => html`<button key=${i} onClick=${() => this.setState({ radioCh: i })} style=${"flex:1;min-width:0;font-family:" + VT + ";font-size:14px;letter-spacing:.5px;padding:6px 6px;cursor:pointer;border:1px solid #2bd968;transition:all .13s ease;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" + (i === chIdx ? "background:#1aff80;color:#04100a;" : "background:#0c2415;color:#7dffae;")}>${c.label}</button>`)}
           </div>
-          <div style=${"font-family:" + VT + ";font-size:13px;color:#2c7a48;letter-spacing:.5px;text-align:center;line-height:1.4;"}>STREAMING VIA SPOTIFY<br/>30s PREVIEW · FULL TRACKS WHEN SIGNED IN</div>
         </div>`;
       }
 

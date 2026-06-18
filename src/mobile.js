@@ -519,7 +519,6 @@
               <span style="flex:1;min-width:0;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.5px;">${c.label}</span>
             </button>`)}
         </div>
-        <div style=${"font-family:" + VT + ";font-size:13px;color:#2c7a48;letter-spacing:.5px;text-align:center;line-height:1.4;"}>STREAMING VIA SPOTIFY<br/>30s PREVIEW · FULL TRACKS WHEN SIGNED IN</div>
       </div>`;
     }
 
