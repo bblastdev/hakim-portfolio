@@ -180,16 +180,16 @@
       x: "https://x.com/",
     },
 
-    // HHX-OS Radio — real 80s/90s Japanese city pop, streamed via official
-    // Spotify embeds (Spotify handles licensing; we never host the audio).
-    // Swap any `playlist` ID below for your own Spotify playlist/track to retune
-    // a channel. The first is Spotify's own editorial playlist (most stable).
+    // HHX-OS Radio — real music streamed via official Spotify embeds (Spotify
+    // handles licensing; we never host the audio). Each channel: `type` is one
+    // of "playlist" | "album" | "track", and `id` is the Spotify ID from a
+    // share/embed link. Swap any to retune a channel.
     radio: {
       station: "TOKYO NIGHT FM",
       channels: [
-        { label: "CITY POP '80s",  freq: "108.3", playlist: "37i9dQZF1DWW28hvtiO3j9" },
-        { label: "TOKYO NIGHTS",   freq: "95.7",  playlist: "1VdpRTsLCEipiJTrQERMST" },
-        { label: "J-FUNK 80/90s",  freq: "101.1", playlist: "0nz3cRJG7ZdCzdWQmIPp56" },
+        { label: "CITY POP '80s", freq: "108.3", type: "playlist", id: "37i9dQZF1DWW28hvtiO3j9" },
+        { label: "FRANK SINATRA", freq: "98.6",  type: "album",    id: "3i67sGIVw8EBlgfSRv3Lj2" },
+        { label: "LAUFEY",        freq: "103.7", type: "album",    id: "0Ydm84ftyiWRGOIFkdl30L" },
       ],
     },
   };

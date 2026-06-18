@@ -492,7 +492,7 @@
       const r = D.radio;
       const chIdx = this.state.radioCh || 0;
       const ch = r.channels[chIdx] || r.channels[0];
-      const src = "https://open.spotify.com/embed/playlist/" + ch.playlist + "?utm_source=generator";
+      const src = "https://open.spotify.com/embed/" + (ch.type || "playlist") + "/" + ch.id + "?utm_source=generator";
       return html`
       <div style="padding:14px;display:flex;flex-direction:column;gap:13px;">
         <div style="border:1px solid #1c5a34;background:#04100a;padding:14px;display:flex;flex-direction:column;gap:12px;">
@@ -519,7 +519,7 @@
               <span style="flex:1;min-width:0;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.5px;">${c.label}</span>
             </button>`)}
         </div>
-        <div style=${"font-family:" + VT + ";font-size:13px;color:#2c7a48;letter-spacing:.5px;text-align:center;line-height:1.4;"}>CITY POP · STREAMING VIA SPOTIFY<br/>30s PREVIEW · FULL TRACKS WHEN SIGNED IN</div>
+        <div style=${"font-family:" + VT + ";font-size:13px;color:#2c7a48;letter-spacing:.5px;text-align:center;line-height:1.4;"}>STREAMING VIA SPOTIFY<br/>30s PREVIEW · FULL TRACKS WHEN SIGNED IN</div>
       </div>`;
     }
 
